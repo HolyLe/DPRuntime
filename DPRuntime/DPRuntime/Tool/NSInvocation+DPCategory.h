@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class DPTuple;
 @interface NSInvocation (DPCategory)
 
-@property (nonatomic, copy) DPTuple *dp_argumentsTuple;
+@property (nonatomic, copy, readonly) DPTuple *dp_argumentsTuple;
 
 - (id)dp_argumentAtIndex:(NSInteger)index;
 

@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "DPCrashShield.h"
+
 @interface AppDelegate ()
 
 @end
@@ -17,7 +17,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-//    [DPCrashShield start];
     return YES;
 }
 

@@ -48,16 +48,12 @@
                 }
             }
             if (isConformsToPro) {
-                SEL load = sel_registerName("dp_load");
+                
                 Class metaClass = object_getClass(clas);
-                IMP imp = class_getMethodImplementation(metaClass, load);
-                if (isValidImp(imp)) {
-                    ((void (*) (id, SEL))imp)(metaClass,load);
-                }
                 SEL requireSel = sel_registerName("dp_runtimeRequireClasses:");
                 SEL sel = sel_registerName("dp_runtimeRequireClasses:currentClass:count:");
                 BOOL isShouldBack = YES;
-                imp = class_getMethodImplementation(metaClass, requireSel);
+                IMP imp = class_getMethodImplementation(metaClass, requireSel);
                 if (imp != NULL && imp != _objc_msgForward) {
                     isShouldBack = ((BOOL (*) (id, SEL, Class))imp)(metaClass,sel, clas);
                 }
@@ -106,20 +102,12 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         runtime = [DPRuntime new];
-//        [runtime swizzledClass];
         [runtime deallocSet];
         
     });
     
     return runtime;
 }
-
-//- (NSMutableSet *)swizzledClass{
-//    if (!_swizzledClass) {
-//        _swizzledClass = [NSMutableSet set];
-//    }
-//    return _swizzledClass;
-//}
 
 - (NSMutableSet *)deallocSet{
     if (!_deallocSet) {
@@ -140,9 +128,9 @@ static inline void dp_swizzleDeallocIfNeed(Class swizzleClass){
         NSString *className = NSStringFromClass(swizzleClass);
         if ([deallocSet containsObject:className]) return;
         SEL deallocSelector = sel_registerName("dealloc");
-
+        
         __block void (* oldImp) (__unsafe_unretained id, SEL) = NULL;
-
+        
         id newImpBlock = ^ (__unsafe_unretained id self){
             
             NSMutableArray *deallocTask = objc_getAssociatedObject(self, &DPRuntimeDeallocTasks);

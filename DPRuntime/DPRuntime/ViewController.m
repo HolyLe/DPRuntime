@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "Aspects.h"
 #import "DPRuntime.h"
 @interface ViewController ()
 
@@ -14,22 +15,25 @@
 
 @implementation ViewController
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+//        [ViewController aspect_hookSelector:@selector(viewWillAppear:) withOptions:AspectPositionBefore usingBlock:^(id a, id o){
+//
+//        } error:nil];
+    }
+    return self;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    NSLog(@"111111111111");
-    [self.view dp_swizzingWithSel:@selector(setNeedsDisplay) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
-        NSLog(@"1111");
+    [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsAfter block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
+        
     }];
-    [[NSMutableArray array] addObject:nil];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self.view setNeedsLayout];
-    });
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self.view setNeedsDisplay];
-    });
     // Do any additional setup after loading the view, typically from a nib.
 }
-
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+}
 
 @end

@@ -58,12 +58,16 @@
 
 - (void)start{
     __weak typeof(self)weakSelf = self;
-    [self->_head start:self->_block finish:^{
-        __strong typeof (weakSelf)self = weakSelf;
-        if (!self) return;
+    if (self->_head == nil) {
         self->_finishBlock();
-        self->_block = nil;
-    } object:_object sel:_selector stop:stop];
+    }else{
+        [self->_head start:self->_block finish:^{
+            __strong typeof (weakSelf)self = weakSelf;
+            if (!self) return;
+            self->_finishBlock();
+            self->_block = nil;
+        } object:_object sel:_selector stop:stop];
+    }
 }
 
 - (void)addDPRuntimeNode:(DPRuntimeSwizzleAttributeMapNode *)node{
@@ -330,6 +334,7 @@ static void DPSwizzleForwardInvocation(Class class) {
             [afterMap start];
         };
         [beforeMap start];
+        
     });
     
     class_replaceMethod(class, forwadInvationSel, newImp, method_getTypeEncoding(forwadInvationMethod));
@@ -395,19 +400,25 @@ static void DPNSObjectSwizzle(SEL selector,id object){
         Method targetMethod;
         const void * key = (__bridge const void *)NSStringFromSelector(selector);
         DPRuntimeSwizzleAttribute *attribute = DPClassAttributeWithClass(orignClass)->_attribute;
-        DPRuntimeSwizzleAttributeDetail *detail = CFDictionaryGetValue(attribute->_selectMap,  key);
-        if (!detail) {
-            detail = [DPRuntimeSwizzleAttributeDetail new];
-            CFDictionarySetValue(attribute->_selectMap, key,(__bridge void *)detail);
-        }
-        if (detail->_isSwizzled) {
-            targetMethod = class_getClassMethod(orignClass, newSel);
+        if (attribute) {
+            DPRuntimeSwizzleAttributeDetail *detail = CFDictionaryGetValue(attribute->_selectMap,  key);
+            if (!detail) {
+                detail = [DPRuntimeSwizzleAttributeDetail new];
+                CFDictionarySetValue(attribute->_selectMap, key,(__bridge void *)detail);
+            }
+            if (detail->_isSwizzled) {
+                targetMethod = class_getClassMethod(orignClass, newSel);
+            }else{
+                targetMethod = method;
+            }
+            detail->_isSwizzled = YES;
         }else{
             targetMethod = method;
         }
+        
         BOOL addedAlias __attribute__((unused)) = class_addMethod(class, newSel, method_getImplementation(targetMethod), typeEncoding);
         NSCAssert(addedAlias, @"Original implementation for %@ is already copied to %@ on %@", NSStringFromSelector(selector), NSStringFromSelector(newSel), class);
-        detail->_isSwizzled = YES;
+        
         class_replaceMethod(class, selector, _objc_msgForward, typeEncoding);
     }
 }

@@ -35,10 +35,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)dp_runtimeClassEachMethod:(Method)method;
 
 + (void)dp_runtimeObjectEachMethod:(Method)method;
-/**
- 在此方法中实现方法替换
- */
-+ (void)dp_load;
 
 @end
 
