@@ -48,9 +48,6 @@
     }
 }
 
-
-
-
 + (void)dpContainerShield{
     
     Class class = objc_getClass("__NSArrayM");
@@ -77,8 +74,6 @@
             *stop = YES;
         }
     }];
-    
-
 }
 
 + (void)dpArrayShield:(Class)clas{
