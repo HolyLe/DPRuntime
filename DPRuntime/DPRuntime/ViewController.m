@@ -26,9 +26,12 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSMutableArray new] addObject:nil];
-    [[NSMutableArray new] objectAtIndex:3];
-    [[NSMutableArray new] insertObject:nil atIndex:3];
+//    [[NSMutableArray new] addObject:nil];
+//    [[NSMutableArray new] objectAtIndex:3];
+//    [[NSMutableArray new] insertObject:nil atIndex:3];
+    id aa = nil;
+    NSArray *array =  @[@"1111",aa];
+    NSLog(@"%@", array);
     // Do any additional setup after loading the view, typically from a nib.
 }
 - (void)viewWillAppear:(BOOL)animated{

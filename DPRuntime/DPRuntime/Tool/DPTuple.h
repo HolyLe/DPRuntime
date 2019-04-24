@@ -34,8 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)objectAtIndex:(NSInteger)index;
 
+
 - (nullable NSArray *)array;
 
+@property (nonatomic, assign) BOOL  tupleError;
 @end
 
 @interface DPTuple (ObjectSubscripting)
