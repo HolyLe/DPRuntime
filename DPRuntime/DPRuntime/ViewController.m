@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "Aspects.h"
 #import "DPRuntime.h"
 @interface ViewController ()
 
@@ -27,9 +26,9 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsAfter block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
-        
-    }];
+    [[NSMutableArray new] addObject:nil];
+    [[NSMutableArray new] objectAtIndex:3];
+    [[NSMutableArray new] insertObject:nil atIndex:3];
     // Do any additional setup after loading the view, typically from a nib.
 }
 - (void)viewWillAppear:(BOOL)animated{

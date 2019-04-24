@@ -48,33 +48,32 @@
     }
 }
 
-
-
-
 + (void)dpContainerShield{
+    
     Class class = objc_getClass("__NSArrayM");
-    [DPRuntimeTool swizzingWithClass:class sel:@selector(addObject:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
-        if (tuple.first == nil) {
-            *stop = YES;
-        }
-    }];
+    
     [DPRuntimeTool swizzingWithClass:class sel:@selector(insertObject:atIndex:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
         if (tuple.first == nil) {
+            NSLog(@"Crash with insetObject nil object :::%@", object);
+            *stop = YES;
+        }
+        if ([tuple.second integerValue] > [object count]) {
+            NSLog(@"Crash Insert with out range :::%@, %ld, %ld", object, [object count], [tuple.second integerValue]);
             *stop = YES;
         }
     }];
     [DPRuntimeTool swizzingWithClass:class sel:@selector(addObject:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
         if (tuple.first == nil) {
+            NSLog(@"Crash with addObject Nil :::%@", object);
             *stop = YES;
         }
     }];
     [DPRuntimeTool swizzingWithClass:class sel:@selector(objectAtIndex:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
         if ([tuple.first integerValue] >= [object count]) {
+            NSLog(@"Crash with out range :::%@, %ld, %@", object, [object count], tuple.first);
             *stop = YES;
         }
     }];
-    
-
 }
 
 + (void)dpArrayShield:(Class)clas{
