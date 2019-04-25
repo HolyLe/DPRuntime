@@ -38,6 +38,10 @@
         
     }, object, selector);
 }
+- (void)dealloc
+{
+    
+}
 @end
 
 @interface DPRuntimeSwizzleAttributeMap : NSObject
@@ -55,7 +59,14 @@
 @end
 
 @implementation DPRuntimeSwizzleAttributeMap
-
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _array = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+    }
+    return self;
+}
 - (void)start{
     __weak typeof(self)weakSelf = self;
     if (self->_head == nil) {
@@ -79,16 +90,12 @@
         _head = node;
     }
     _tail = node;
-    if (!_array) {
-        _array = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
-    }
+    
     CFArrayAppendValue(_array, (__bridge const void *)node);
 }
 
 - (void)insetDPRuntimeNode:(DPRuntimeSwizzleAttributeMapNode *)node{
-    if (!_array) {
-        _array = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
-    }
+    
     if (_tail) {
         node->_next = _head;
         _head->_prev = node;
@@ -105,7 +112,11 @@
     DPRuntimeSwizzleAttributeMapNode *node = map->_tail;
     while (node) {
         [self insetDPRuntimeNode:node];
-        node = node->_prev;
+        if (node->_prev) {
+            node = node->_prev;
+        }else{
+            break;
+        }
     }
 }
 
@@ -114,7 +125,11 @@
     DPRuntimeSwizzleAttributeMapNode *node = map->_head;
     while (node) {
         [self addDPRuntimeNode:node];
-        node = node->_next;
+        if (node->_next) {
+            node = node->_next;
+        }else{
+            break;
+        }
     }
 }
 
@@ -328,12 +343,12 @@ static void DPSwizzleForwardInvocation(Class class) {
             Class invocationClass = object_getClass(invocaion.target);
             SEL sel = DPNewForSelector(invocaion.selector);
             if ([invocationClass instancesRespondToSelector:sel]) {
-//                if (tuple.tupleError) {
-//                    NSInteger count = [tuple count];
-//                    for (int i = 0; i < count; i++) {
-//                        [invocaion dp_setArgument:tuple[i] atIndex:i+2];
-//                    }
-//                }
+                //                if (tuple.tupleError) {
+                //                    NSInteger count = [tuple count];
+                //                    for (int i = 0; i < count; i++) {
+                //                        [invocaion dp_setArgument:tuple[i] atIndex:i+2];
+                //                    }
+                //                }
                 invocaion.selector = sel;
                 [invocaion invoke];
             }

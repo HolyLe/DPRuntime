@@ -97,7 +97,7 @@
             for (int i = 0 ; i < count; i++) {
                 if (objects[i] == nil) {
                     NSLog(@"Crash log Class%@", [objects[i] class]);
-                    * stop = YES;   
+                    * stop = YES;
                     return;
                 }
             }
