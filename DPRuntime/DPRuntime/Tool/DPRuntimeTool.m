@@ -46,10 +46,6 @@
     }, object, selector);
 }
 
-- (void)dealloc
-{
-    NSLog(@"node  %p  销毁了",self);
-}
 @end
 
 @interface DPRuntimeSwizzleAttributeMap : NSObject

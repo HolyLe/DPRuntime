@@ -33,13 +33,13 @@
 //    NSArray *array =  @[@"1111",aa];
 //    NSLog(@"%@", array);
     [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
-         NSLog(@"node  %p   创建了1",object);
+         
     }];
     [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
-         NSLog(@"node  %p   创建了2",object);
+        
     }];
     [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
-         NSLog(@"node  %p   创建了3",object);
+        
     }];
     
     // Do any additional setup after loading the view, typically from a nib.
