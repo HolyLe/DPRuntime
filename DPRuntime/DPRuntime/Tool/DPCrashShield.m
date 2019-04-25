@@ -26,8 +26,8 @@
 @implementation DPCrashShield
 
 + (void)start{
-    [self dpUICrashShield];
-    [self dpContainerShield];
+//    [self dpUICrashShield];
+//    [self dpContainerShield];
 }
 
 + (void)dpUICrashShield{

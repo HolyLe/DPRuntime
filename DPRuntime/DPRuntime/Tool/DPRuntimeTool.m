@@ -37,7 +37,8 @@
         if (block) {
             block(self->_swizzingBlock);
         }
-        if (self ->_next && !*stop) {
+        
+        if (self ->_next) {
             [self->_next start:block finish:finish object:object sel:selector stop:stop];
         }else{
             finish();
@@ -45,7 +46,10 @@
         
     }, object, selector);
 }
-
+- (void)dealloc
+{
+    
+}
 @end
 
 @interface DPRuntimeSwizzleAttributeMap : NSObject
@@ -90,7 +94,7 @@
 
 - (void)insetDPRuntimeNode:(DPRuntimeSwizzleAttributeMapNode *)node{
     
-    if (_tail) {
+    if (_head) {
         node->_next = _head;
         _head->_prev = node;
     }else{
@@ -139,7 +143,10 @@
     }
 }
 
-
+- (void)dealloc
+{
+    
+}
 @end
 
 @interface  DPRuntimeSwizzleAttributeDetail : NSObject{
@@ -324,7 +331,7 @@ static void DPSwizzleForwardInvocation(Class class) {
         }
         if (objectDetail) {
             [beforeMap appendDPRuntimeMap:objectDetail->_beforeMap];
-            [afterMap insetDPRuntimeMap:objectDetail->_afterMap];
+            [afterMap appendDPRuntimeMap:objectDetail->_afterMap];
         }
         beforeMap->_object = self;
         beforeMap->_selector = invocaion.selector;
@@ -334,7 +341,8 @@ static void DPSwizzleForwardInvocation(Class class) {
             block(self, invocaion.selector,DPRuntimeMethodSwizzleOptionsBefore, tuple, &stop);
         };
         afterMap->_block = ^(DPRuntimeObjectSwizzingBlock block){
-            block(self, invocaion.selector,DPRuntimeMethodSwizzleOptionsAfter, tuple, &stop);
+            BOOL _stop = NO;
+            block(self, invocaion.selector,DPRuntimeMethodSwizzleOptionsAfter, tuple, &_stop);
         };
         afterMap->_finishBlock = ^{
             stop = NO;
