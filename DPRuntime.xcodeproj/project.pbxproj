@@ -77,6 +77,8 @@
 				7308EE0D226F2ACF003420E3 /* Tool */,
 				7308EDF7226F2AB5003420E3 /* AppDelegate.h */,
 				7308EDF8226F2AB5003420E3 /* AppDelegate.m */,
+				7308EE26226F2B02003420E3 /* DPCrashShield.h */,
+				7308EE1E226F2B01003420E3 /* DPCrashShield.m */,
 				7308EDFA226F2AB5003420E3 /* ViewController.h */,
 				7308EDFB226F2AB5003420E3 /* ViewController.m */,
 				7308EDFD226F2AB5003420E3 /* Main.storyboard */,
@@ -91,8 +93,6 @@
 		7308EE0D226F2ACF003420E3 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
-				7308EE26226F2B02003420E3 /* DPCrashShield.h */,
-				7308EE1E226F2B01003420E3 /* DPCrashShield.m */,
 				7308EE29226F2B02003420E3 /* DPRuntime.h */,
 				7308EE27226F2B02003420E3 /* DPRuntime.m */,
 				7308EE21226F2B02003420E3 /* DPRuntimeDefine.h */,
