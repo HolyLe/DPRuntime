@@ -63,7 +63,7 @@
 {
     self = [super init];
     if (self) {
-        _array = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
+        _array = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
     }
     return self;
 }

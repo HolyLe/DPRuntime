@@ -16,7 +16,7 @@
 - (DPTuple *)dp_argumentsTuple{
     NSUInteger argumentsCount = self.methodSignature.numberOfArguments;
     if (argumentsCount == 0) return [DPTuple new];
-    CFMutableArrayRef array = CFArrayCreateMutable(kCFAllocatorDefault, argumentsCount, &kCFTypeArrayCallBacks);
+    CFMutableArrayRef array = CFArrayCreateMutable(kCFAllocatorDefault, argumentsCount, NULL);
     for (int i = 2; i < argumentsCount; i++) {
         CFArrayAppendValue(array, (__bridge void *)([self dp_argumentAtIndex:i]?:DPTupleNil.dpTupleNil));
     }
