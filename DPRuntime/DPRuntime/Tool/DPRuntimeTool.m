@@ -15,13 +15,20 @@
     @package
     DPRuntimeObjectSwizzingBlock _swizzingBlock;
     DPPerformBlock _perFormBlock;
-    __unsafe_unretained DPRuntimeSwizzleAttributeMapNode *_next;
-    __unsafe_unretained DPRuntimeSwizzleAttributeMapNode *_prev;
+    DPRuntimeSwizzleAttributeMapNode *_next;
+    DPRuntimeSwizzleAttributeMapNode *_prev;
 }
 @end
 
 @implementation DPRuntimeSwizzleAttributeMapNode
-
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+            
+    }
+    return self;
+}
 - (void)start:(void (^)(DPRuntimeObjectSwizzingBlock block))block finish:(void (^)(void))finish object:(id)object sel:(SEL)selector stop:(BOOL *)stop{
     __weak typeof(self)weakSelf = self;
     self->_perFormBlock(^{
@@ -38,16 +45,16 @@
         
     }, object, selector);
 }
+
 - (void)dealloc
 {
-    
+    NSLog(@"node  %p  销毁了",self);
 }
 @end
 
 @interface DPRuntimeSwizzleAttributeMap : NSObject
 {
     @package
-    CFMutableArrayRef _array;
     DPRuntimeSwizzleAttributeMapNode *_head;
     DPRuntimeSwizzleAttributeMapNode *_tail;
     void (^_block)(DPRuntimeObjectSwizzingBlock block);
@@ -59,14 +66,7 @@
 @end
 
 @implementation DPRuntimeSwizzleAttributeMap
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        _array = CFArrayCreateMutable(kCFAllocatorDefault, 0, NULL);
-    }
-    return self;
-}
+
 - (void)start{
     __weak typeof(self)weakSelf = self;
     if (self->_head == nil) {
@@ -90,8 +90,6 @@
         _head = node;
     }
     _tail = node;
-    
-    CFArrayAppendValue(_array, (__bridge const void *)node);
 }
 
 - (void)insetDPRuntimeNode:(DPRuntimeSwizzleAttributeMapNode *)node{
@@ -99,10 +97,8 @@
     if (_tail) {
         node->_next = _head;
         _head->_prev = node;
-        CFArrayInsertValueAtIndex(_array, 0, (__bridge const void *)node);
     }else{
         _tail = node;
-        CFArrayAppendValue(_array, (__bridge const void *)node);
     }
     _head = node;
 }
@@ -133,12 +129,21 @@
     }
 }
 
-- (void)dealloc
-{
-    if (_array) {
-        CFRelease(_array);
+- (void)dp_deallocMap{
+    DPRuntimeSwizzleAttributeMapNode *node = self->_head;
+    if (node) {
+        while (node->_next) {
+            if (node->_prev) {
+                node->_prev = nil;
+            }
+            DPRuntimeSwizzleAttributeMapNode *newNode = node->_next;
+            node->_next = nil;
+            node = newNode;
+        }
     }
 }
+
+
 @end
 
 @interface  DPRuntimeSwizzleAttributeDetail : NSObject{
@@ -445,6 +450,8 @@ static void DPNSObjectSwizzle(SEL selector,id object){
 }
 static void ModelSetWithDictionaryFunction(const void *_key, const void *_value,void *_context) {
     DPRuntimeSwizzleAttributeDetail *detail = (__bridge DPRuntimeSwizzleAttributeDetail *)_value;
+    [detail->_afterMap dp_deallocMap];
+    [detail->_beforeMap dp_deallocMap];
     detail->_afterMap = nil;
     detail->_beforeMap = nil;
 }

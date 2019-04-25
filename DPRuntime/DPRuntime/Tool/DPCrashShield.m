@@ -26,8 +26,8 @@
 @implementation DPCrashShield
 
 + (void)start{
-    [self dpUICrashShield];
-    [self dpContainerShield];
+//    [self dpUICrashShield];
+//    [self dpContainerShield];
 }
 
 + (void)dpUICrashShield{
@@ -62,6 +62,7 @@
             *stop = YES;
         }
     }];
+    
     [DPRuntimeTool swizzingWithClass:classM sel:@selector(addObject:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
         if (tuple.first == nil) {
             NSLog(@"Crash with addObject Nil :::%@", object);

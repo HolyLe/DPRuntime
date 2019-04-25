@@ -29,13 +29,31 @@
 //    [[NSMutableArray new] addObject:nil];
 //    [[NSMutableArray new] objectAtIndex:3];
 //    [[NSMutableArray new] insertObject:nil atIndex:3];
-    id aa = nil;
-    NSArray *array =  @[@"1111",aa];
-    NSLog(@"%@", array);
+//    id aa = nil;
+//    NSArray *array =  @[@"1111",aa];
+//    NSLog(@"%@", array);
+    [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
+         NSLog(@"node  %p   创建了1",object);
+    }];
+    [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
+         NSLog(@"node  %p   创建了2",object);
+    }];
+    [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
+         NSLog(@"node  %p   创建了3",object);
+    }];
+    
     // Do any additional setup after loading the view, typically from a nib.
 }
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
 }
-
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+    ViewController *vc = [ViewController new];
+    vc.view.backgroundColor = [UIColor whiteColor];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+- (void)dealloc
+{
+    
+}
 @end
