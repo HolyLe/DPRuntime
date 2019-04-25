@@ -11,7 +11,6 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DPCrashShield : NSObject
-+ (void)start;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -12,22 +12,13 @@
 #import <pthread.h>
 #import "DPRuntimeTool.h"
 
-@implementation NSObject(DPCrashShield)
 
-+ (void)load{
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        [DPCrashShield start];
-    });
-}
-
-@end
 
 @implementation DPCrashShield
 
 + (void)start{
-//    [self dpUICrashShield];
-//    [self dpContainerShield];
+    [self dpUICrashShield];
+    [self dpContainerShield];
 }
 
 + (void)dpUICrashShield{
@@ -110,4 +101,15 @@
 + (void)dpArrayShield:(Class)clas{
     
 }
+@end
+
+@implementation NSObject(DPCrashShield)
+
++ (void)load{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [DPCrashShield start];
+    });
+}
+
 @end

@@ -352,12 +352,6 @@ static void DPSwizzleForwardInvocation(Class class) {
             Class invocationClass = object_getClass(invocaion.target);
             SEL sel = DPNewForSelector(invocaion.selector);
             if ([invocationClass instancesRespondToSelector:sel]) {
-                //                if (tuple.tupleError) {
-                //                    NSInteger count = [tuple count];
-                //                    for (int i = 0; i < count; i++) {
-                //                        [invocaion dp_setArgument:tuple[i] atIndex:i+2];
-                //                    }
-                //                }
                 invocaion.selector = sel;
                 [invocaion invoke];
             }
