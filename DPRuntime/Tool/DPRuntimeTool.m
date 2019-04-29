@@ -25,7 +25,7 @@
 {
     self = [super init];
     if (self) {
-            
+        
     }
     return self;
 }
@@ -46,10 +46,12 @@
         
     }, object, selector);
 }
+
 - (void)dealloc
 {
-    
+    NSLog(@"node 销毁了 %@",self);
 }
+
 @end
 
 @interface DPRuntimeSwizzleAttributeMap : NSObject
@@ -58,7 +60,7 @@
     DPRuntimeSwizzleAttributeMapNode *_head;
     DPRuntimeSwizzleAttributeMapNode *_tail;
     void (^_block)(DPRuntimeObjectSwizzingBlock block);
-    DPBlock _finishBlock;
+    void (^_finishBlock) (DPRuntimeSwizzleAttributeMap *map) ;
     id _object;
     SEL _selector;
     BOOL *stop;
@@ -68,14 +70,14 @@
 @implementation DPRuntimeSwizzleAttributeMap
 
 - (void)start{
-    __weak typeof(self)weakSelf = self;
     if (self->_head == nil) {
-        self->_finishBlock();
+        self->_finishBlock(self);
     }else{
+        __weak typeof(self)weakSelf = self;
         [self->_head start:self->_block finish:^{
             __strong typeof (weakSelf)self = weakSelf;
             if (!self) return;
-            self->_finishBlock();
+            self->_finishBlock(self);
             self->_block = nil;
         } object:_object sel:_selector stop:stop];
     }
@@ -107,7 +109,12 @@
     if (!map) return;
     DPRuntimeSwizzleAttributeMapNode *node = map->_tail;
     while (node) {
-        [self insetDPRuntimeNode:node];
+        DPRuntimeSwizzleAttributeMapNode *newNode = [DPRuntimeSwizzleAttributeMapNode new];
+        if (newNode->_swizzingBlock) {
+            newNode->_swizzingBlock = [node->_swizzingBlock copy];
+            newNode->_perFormBlock = [node->_perFormBlock copy];
+        }
+        [self insetDPRuntimeNode:newNode];
         if (node->_prev) {
             node = node->_prev;
         }else{
@@ -120,7 +127,10 @@
     if (!map) return;
     DPRuntimeSwizzleAttributeMapNode *node = map->_head;
     while (node) {
-        [self addDPRuntimeNode:node];
+        DPRuntimeSwizzleAttributeMapNode *newNode = [DPRuntimeSwizzleAttributeMapNode new];
+        newNode->_swizzingBlock = [node->_swizzingBlock copy];
+        newNode->_perFormBlock = [node->_perFormBlock copy];
+        [self addDPRuntimeNode:newNode];
         if (node->_next) {
             node = node->_next;
         }else{
@@ -344,10 +354,12 @@ static void DPSwizzleForwardInvocation(Class class) {
             BOOL _stop = NO;
             block(self, invocaion.selector,DPRuntimeMethodSwizzleOptionsAfter, tuple, &_stop);
         };
-        afterMap->_finishBlock = ^{
+        afterMap->_finishBlock = ^(DPRuntimeSwizzleAttributeMap *map){
             stop = NO;
+            [map dp_deallocMap];
         };
-        beforeMap->_finishBlock = ^{
+        beforeMap->_finishBlock = ^(DPRuntimeSwizzleAttributeMap *map){
+            [map dp_deallocMap];
             if (stop) return;
             Class invocationClass = object_getClass(invocaion.target);
             SEL sel = DPNewForSelector(invocaion.selector);

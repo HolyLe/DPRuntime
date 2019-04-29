@@ -19,6 +19,7 @@
 + (void)start{
     [self dpUICrashShield];
     [self dpContainerShield];
+    [self dpContainerDicShield];
 }
 
 + (void)dpUICrashShield{
@@ -66,6 +67,12 @@
             *stop = YES;
         }
     }];
+    [DPRuntimeTool swizzingWithClass:objc_getClass("__NSArray0") sel:@selector(objectAtIndex:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
+        if ([tuple.first integerValue] >= [object count]) {
+            NSLog(@"Crash with out range :::%@, %ld, %@", object, [object count], tuple.first);
+            *stop = YES;
+        }
+    }];
     
     [DPRuntimeTool swizzingWithClass:classI sel:@selector(objectAtIndex:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
         if ([tuple.first integerValue] >= [object count]) {
@@ -98,8 +105,13 @@
     
 }
 
-+ (void)dpArrayShield:(Class)clas{
-    
++ (void)dpContainerDicShield{
+    [DPRuntimeTool swizzingWithClass:objc_getClass("__NSDictionaryM") sel:@selector(setObject:forKey:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
+        if (tuple.first == nil) {
+            *stop = YES;
+            NSLog(@"Crash with DIC setObject Nil :::%@", object);
+        }
+    }];
 }
 @end
 

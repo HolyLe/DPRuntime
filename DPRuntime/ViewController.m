@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-//#import "DPRuntime.h"
+#import "DPRuntime.h"
 @interface ViewController ()
 
 @end
@@ -18,23 +18,24 @@
 {
     self = [super init];
     if (self) {
-//        [ViewController aspect_hookSelector:@selector(viewWillAppear:) withOptions:AspectPositionBefore usingBlock:^(id a, id o){
-//
-//        } error:nil];
+
     }
     return self;
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [[NSMutableArray new] addObject:nil];
-    [[NSMutableArray new] objectAtIndex:3];
-    [[NSMutableArray new] insertObject:nil atIndex:3];
-    id aa = nil;
-    NSArray *array =  @[@"1111",aa];
-    NSLog(@"%@", array);
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [self.view setNeedsLayout];
-    });
+    
+//    [[NSMutableArray new] addObject:nil];
+//    [[NSMutableArray new] objectAtIndex:3];
+//    [[NSMutableArray new] insertObject:nil atIndex:3];
+//    id aa = nil;
+//    NSArray *array =  @[@"1111",aa];
+//    NSLog(@"%@", array);
+//    @[][4];
+//    [[NSMutableDictionary dictionary] setObject:nil forKey:@""];
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//        [self.view setNeedsLayout];
+//    });
 //    [self dp_swizzingWithSel:@selector(viewWillAppear:) withOptions:DPRuntimeMethodSwizzleOptionsBefore block:^(id object, SEL sel, DPRuntimeMethodSwizzleOptions options, DPTuple *tuple, BOOL *stop) {
 //        
 //    }];
