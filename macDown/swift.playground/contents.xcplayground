@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<playground version='6.0' target-platform='ios'>
+    <pages>
+        <page name='基础内容'/>
+        <page name='运算符'/>
+        <page name='字符串'/>
+        <page name='集合类型'/>
+        <page name='Untitled Page'/>
+    </pages>
+</playground>

@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   # s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
 
    s.author             = { "麻小亮" => "zshnr1993@qq.com" }
-   s.platform     = :ios
+   s.platform     = :ios, "8.0"
 
    s.source       = { :git => "https://github.com/HolyLe/DPRuntime.git", :tag =>          s.version.to_s } 
 
